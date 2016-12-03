@@ -1,0 +1,58 @@
+<html>
+<body>
+<h1><%=ejsname%></h1>
+<script>
+var message="";
+
+var pictureData="<%=ejspicture%>";
+if(pictureData!="NoImage")
+	message+='<img src="data:<%=ejspicturetype%>;base64,<%=ejspicture%>"><br>';
+
+message+='<ul>';
+if("<%=ejscuisine%>"!="NoData") 
+	message+='<li>Cuisine: <%=ejscuisine%></li>';
+if("<%=ejsborough%>"!="NoData")
+	message+='<li>Borough: <%=ejsborough%></li>';
+if("<%=ejsstreet%>"!="NoData")
+	message+='<li>Street: <%=ejsstreet%></li>';
+if("<%=ejszipcode%>"!="NoData")
+	message+='<li>Zipcode: <%=ejszipcode%></li>';
+
+var lon=("<%=ejslon%>"!="NoData")?<%=ejslon%>:"";
+var lat=("<%=ejslat%>"!="NoData")?<%=ejslon%>:"";
+if(lon!=""||lat!="")
+message+='<li>GPS:['+lon+','+lat+']</li>';
+
+var rateString="<%=ejsratearray%>";
+if(rateString!="[]"){
+	rateString=rateString.substring(2,rateString.length-2);
+	message+='<li>Rate:</li>';
+	var rateObj=rateString.split(/},{/);
+	message+='<ol>';
+	for(index in rateObj){
+		attribute=rateObj[index].split(",");	
+    		message+='<li>'+attribute[0].substring(21,attribute[0].length-2);
+		message+='-('+attribute[1].substring(16)+')</li>';
+	}
+	message+='</ol>';
+}
+
+message+='<li>Creater: <%=ejscreater%></li>';
+
+if(lon!=""&&lat!="")
+	message+='<li><a href="http://maps.google.com/?ll=<%=ejslat%>,<%=ejslon%>" target="_blink">Google Map</a></li>';
+
+message+='</ul>';
+message+='<form action="/update" method="get"><input type="hidden" name="index" value="<%=ejsindex%>">';
+message+='<input type="submit" value="Update Restaurant"></form>';
+message+='<form action="/deleteconfirm" method="get"><input type="hidden" name="index" value="<%=ejsindex%>">';
+message+='<input type="submit" value="Delete Restaurant"></form>';
+message+='<form action="/rate" method="get"><input type="hidden" name="index" value="<%=ejsindex%>">';
+message+='<input type="submit" value="Rate Restaurant"></form>';
+message+='<form action="/read" method="get">';
+message+='<input type="submit" value="Back To All Restaurant">';
+message+='<input type="hidden" name="aquery" value="novalue"></form><br>';
+document.write(message);
+</script>
+</body>
+</html>
